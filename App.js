@@ -1,14 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TextInput, Button, View, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 import { useState } from 'react';
+import GoalInput from './components/GoalInput';
+import GoalItem from './components/GoalItem';
 
 export default function App() {
   const [enteredGoal, setEnteredGoal] = useState({});
   const [courseGoals, setCourseGoals] = useState([]);
-  const [indexId, setIndexId] = useState(1);
 
   function goalInputHandler(enteredText) {
-    console.log(courseGoals);
     setEnteredGoal({ key: Math.random().toString(), text: enteredText });
   }
   function addGoalHandler() {
@@ -17,19 +16,12 @@ export default function App() {
 
   return (
     <View style={styles.appContainer}>
-      <View style={styles.inputContainer}>
-        <TextInput style={styles.textInput} placeholder='Your Course Goal!' onChangeText={goalInputHandler} />
-        <Button title='Add Goal' onPress={addGoalHandler} />
-      </View>
+      <GoalInput goalInputHandler={goalInputHandler} addGoalHandler={addGoalHandler} />
       <View style={styles.goalsContainer}>
         <FlatList
           data={courseGoals}
           renderItem={itemData => {
-            return (
-              <View style={styles.goalItem}>
-                <Text style={styles.goalText}>{itemData.item.text}</Text>
-              </View>
-            );
+            return <GoalItem text={itemData.item.text} />;
           }}
         />
       </View>
@@ -43,32 +35,7 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingHorizontal: 16,
   },
-  inputContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: '#cccccc',
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: '#cccccc',
-    width: '70%',
-    marginRight: 8,
-    padding: 8,
-  },
   goalsContainer: {
     flex: 5,
-  },
-  goalItem: {
-    margin: 8,
-    padding: 8,
-    borderRadius: 6,
-    backgroundColor: '#5e0acc',
-  },
-  goalText: {
-    color: 'white',
   },
 });
